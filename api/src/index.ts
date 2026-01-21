@@ -3,7 +3,7 @@ import cors from 'cors';
 
 
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
 
 
 const startServer = async () => {
@@ -15,7 +15,7 @@ const startServer = async () => {
             allowedHeaders: ['Content-Type', 'Authorization']
         }));
         app.listen(PORT, () => {
-            console.log("Server is running on port 3000");
+            console.log("Server is running on port", PORT);
         })
     } catch (error) {
         console.error("Error starting server:", error);
