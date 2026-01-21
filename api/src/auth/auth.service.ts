@@ -1,5 +1,5 @@
 import { comparePassword, hashPassword } from "../utils/hash"
-import { generateAccessToken } from "../utils/jwt";
+import { generateAccessToken, generateRefreshToken } from "../utils/jwt";
 import prisma from "../utils/prisma";
 export async function register(email:string, password: string){
     try {
@@ -32,8 +32,10 @@ export async function login(email:string, password:string){
         }
         console.log("Login successful for:", user);
         const token = generateAccessToken({id: user.id, email: user.email})
+        const refreshToken = generateRefreshToken({id: user.id, email: user.email})
         console.log("Generated token:", token);
         return { token,
+                refreshToken,
             user:{
                 id: user.id,
                 email: user.email
