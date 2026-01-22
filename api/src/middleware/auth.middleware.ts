@@ -1,19 +1,27 @@
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
+import { Request, Response, NextFunction } from "express";
+import { verifyAccessToken } from "../utils/jwt";
 
-export const authMiddleware = (req:any, res:any, next:any) => {
-  const token = req.headers.authorization?.split(" ")[1];
+export const authMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
+  const token = authHeader.split(" ")[1];
+  console.log("TOKEN:", token);
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET!);
-    req.user = payload;
+    const payload = verifyAccessToken(token);
+    console.log("PAYLOAD:", payload);
+    req.user = { userId: payload.id };
+
     next();
-  } catch {
-    return res.status(401).json({ message: "Invalid token" });
+  } catch (err: any) {
+    console.error("JWT ERROR:", err.message);
+    return res.status(401).json({ message: err.message });
   }
 };
