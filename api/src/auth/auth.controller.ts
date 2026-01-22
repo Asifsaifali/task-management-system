@@ -19,11 +19,11 @@ const refreshToken = async (req: Request, res: Response) => {
       process.env.JWT_REFRESH_SECRET!
     ) as { userId: string };
 
-    const storedToken = await prisma.refreshToken.findUnique({
+    const Token = await prisma.refreshToken.findUnique({
       where: { token }
     });
 
-    if (!storedToken) {
+    if (!Token) {
       return res.status(403).json({ message: "Invalid refresh token" });
     }
 
@@ -76,7 +76,7 @@ async function login(req: Request, res: Response) {
     });
 
     return res.status(200).json({
-      message: "Login successful",
+      message: "User Login successfully",
       token,
       user
     });
