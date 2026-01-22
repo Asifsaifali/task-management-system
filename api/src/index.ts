@@ -8,18 +8,18 @@ import taskRoute from './tasks/task.routes'
 const app = express();
 const PORT = 4000;
 
+ app.use(cors({
+            origin: 'http://localhost:3000',
+            credentials: true,
+        }));
 
 const startServer = async () => {
     try {
         app.use(express.json());
         app.use(cookieParser())
-        app.use('/v1/auth',authRoutes);
-        app.use('/v1/tasks',taskRoute);
-        app.use(cors({
-            origin: '*',
-            methods: ['GET', 'POST', 'PUT', 'DELETE'],
-            allowedHeaders: ['Content-Type', 'Authorization']
-        }));
+        app.use('/api/v1/auth',authRoutes);
+        app.use('/api/v1/tasks',taskRoute);
+       
         app.listen(PORT, () => {
             console.log("Server is running on port", PORT);
         })
