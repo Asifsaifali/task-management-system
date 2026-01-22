@@ -45,3 +45,46 @@ export async function getTasks({ userId, page, limit, completed, search }: GetTa
     }
 }
 
+export async function getTaskById(userId: string, taskId: string){
+    try {
+        const task = await prisma.task.findFirst({
+            where: {
+                id: taskId,
+                 userId
+            }
+        })
+
+        return task;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+export async function deleteTask(userId: string, taskId: string){
+    try {
+        const task = await prisma.task.deleteMany({
+            where:{
+                id:taskId,
+                userId
+            }
+        })
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function updateTask(userId: string, taskId:string, update: Partial<Task>){
+    try {
+        const task = await prisma.task.updateMany({
+            where:{
+                id:taskId,
+                userId,
+            },
+            data:update
+        })
+        return task;
+    } catch (error) {
+        throw error;
+    }
+}

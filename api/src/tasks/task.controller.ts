@@ -72,8 +72,19 @@ async function getTaskById(req:Request, res: Response){
 
     const userId = req.user.userId;
     const taskId = req.params.id;
+    console.log("Fetching task with ID:", taskId, "for user:", userId);
+    const taskData = await task.getTaskById(userId, taskId);
+    if(!taskData){
+      return res.status(404).json({
+        message: "Task not found"
+      });
+    }
+    console.log("Fetched task:", taskData);
 
-    
+    return res.status(200).json({
+      message: "Task fetched successfully",
+      data: taskData
+    })
 
     
   } catch (error) {
@@ -83,7 +94,43 @@ async function getTaskById(req:Request, res: Response){
   }
 }
 
+async function deleteTask(req:Request, res: Response){
+  try {
+    const userId = req.user.userId;
+    const taskId = req.params.id;
+
+     await task.deleteTask(userId, taskId);
+     return res.status(200).json({
+      message: "Task deleted successfully",
+      success: true
+     })
+
+    
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal server error"
+    });
+  }
+}
+
+async function updateTask(req:Request, res: Response){
+  try {
+    const userId = req.user.userId;
+    const taskId = req.params.id;
+    const update = req.body;
+
+    const updatedTask = await task.updateTask(userId, taskId, update);
+    return res.status(200).json({
+      message: "Task updated successfully",
+      data: updatedTask
+    })
+    
+  } catch (error) {
+    return res.status(500).json({   
+      message: "Internal server error"  
+    });
+  }
+}
 
 
-
-export { createTask, getTasks };
+export { createTask, getTasks, getTaskById, deleteTask, updateTask };

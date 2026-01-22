@@ -13,10 +13,8 @@ export const authMiddleware = (
   }
 
   const token = authHeader.split(" ")[1];
-  console.log("TOKEN:", token);
   try {
     const payload = verifyAccessToken(token);
-    console.log("PAYLOAD:", payload);
     req.user = { userId: payload.id };
 
     next();

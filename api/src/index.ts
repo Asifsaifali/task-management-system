@@ -14,7 +14,7 @@ const startServer = async () => {
         app.use(express.json());
         app.use(cookieParser())
         app.use('/v1/auth',authRoutes);
-        app.use('/v1',taskRoute);
+        app.use('/v1/tasks',taskRoute);
         app.use(cors({
             origin: '*',
             methods: ['GET', 'POST', 'PUT', 'DELETE'],
