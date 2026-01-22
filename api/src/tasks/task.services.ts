@@ -88,3 +88,29 @@ export async function updateTask(userId: string, taskId:string, update: Partial<
         throw error;
     }
 }
+
+export async function toggleTaskCompletion(userId: string, taskId: string, completed: boolean){
+    try {
+        const task = await prisma.task.findFirst({
+            where:{
+                id: taskId,
+                userId
+            }
+        })
+
+        if(!task){
+            throw new Error("Task not found");
+        }
+
+        return await prisma.task.update({
+            where:{
+                id: taskId
+            },
+            data:{
+                completed
+            }
+        })
+    } catch (error) {
+        throw error;
+    }
+}

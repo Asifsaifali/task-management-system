@@ -132,5 +132,23 @@ async function updateTask(req:Request, res: Response){
   }
 }
 
+async function toggleTaskCompletion(req:Request, res: Response){
+  try {
+    const userId = req.user.userId;
+    const taskId = req.params.id;
+    const { completed } = req.body;
 
-export { createTask, getTasks, getTaskById, deleteTask, updateTask };
+    const updatedTask = await task.toggleTaskCompletion(userId, taskId, completed);
+    return res.status(200).json({
+      message: "Task completion toggled successfully",
+      data: updatedTask
+    })
+  } catch (error) {
+    return res.status(500).json({   
+      message: "Internal server error"  
+    });
+  }
+}
+
+
+export { createTask, getTasks, getTaskById, deleteTask, updateTask, toggleTaskCompletion };
